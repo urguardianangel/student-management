@@ -8,6 +8,21 @@ const db = mysql.createConnection({
   password: '',
   database: 'student_management'
 });
+// Delete student
+app.post('/students/delete/:id', (req, res) => {
+  const id = req.params.id;
+
+  db.query('DELETE FROM students WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Unable to delete student');
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).send('Student not found');
+    }
+    res.redirect('/');
+  });
+});
 
 db.connect((err) => {
   if (err) {
